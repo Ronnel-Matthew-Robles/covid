@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>COVID</h2>
+  <div class="col-md-12">
+    <canvas id="myChart" width="400" height="200"></canvas>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+  <script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ days|safe }},
+            datasets: [{
+                label: '# of Cases',
+                data: {{ cases|safe }},
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+    </script>
+  <div class="row row-cols-1 row-cols-md-4">
+  {% for d in data2 %}
+    <div class="col mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ forloop.counter }}. {{ d.country }} | <span class='badge badge-secondary'>{{ d.continent }}</span></h5>
+          <p><strong>Population: </strong>{{ d.population }}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">{{ d.cases.total }} cases</li>
+          <li class="list-group-item">{{ d.cases.recovered }} recovered</li>
+          <li class="list-group-item">{{ d.deaths.total }} deaths</li>
+        </ul>
+        <div class="card-body">
+          <a href="#" class="card-link">Card link</a>
+          <a href="#" class="card-link">Another link</a>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+  </div>
+{% endblock %}
